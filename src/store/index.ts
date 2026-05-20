@@ -1,10 +1,10 @@
 import {configureStore} from '@reduxjs/toolkit';
 import {createAPI} from '../services/api';
-import {questsReducer} from './quests-slice/quests-slice';
-import {questReducer} from './quest-slice/quest-slice';
-import {userReducer} from './user-slice/user-slice';
-import {bookingReducer} from './booking-slice/booking-slice';
-import {reservationsReducer} from './reservations-slice/reservations-slice';
+import questsReducer from './quests-slice/quests-slice';
+import questReducer from './quest-slice/quest-slice';
+import userReducer from './user-slice/user-slice';
+import bookingReducer from './booking-slice/booking-slice';
+import reservationsReducer from './reservations-slice/reservations-slice';
 
 export const api = createAPI();
 
