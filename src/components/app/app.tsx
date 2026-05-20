@@ -9,15 +9,14 @@ import LoginPage from '../../pages/login-page/login-page';
 import BookingPage from '../../pages/booking-page/booking-page';
 import MyQuestsPage from '../../pages/my-quests-page/my-quests-page';
 import NotFoundPage from '../../pages/not-found-page/not-found-page';
-import {AppDispatch, RootState} from '../../store';
-import {useDispatch, useSelector} from 'react-redux';
+import {AppDispatch} from '../../store';
+import {useDispatch} from 'react-redux';
 import {useEffect} from 'react';
 import {checkAuth} from '../../store/user-slice/user-slice';
 import {fetchQuests} from '../../store/quests-slice/quests-slice';
 
 function App(): JSX.Element {
   const dispatch = useDispatch<AppDispatch>();
-  const authorizationStatus = useSelector((state: RootState) => state.USER.authorizationStatus);
 
   useEffect(() => {
     void dispatch(checkAuth());
@@ -39,7 +38,7 @@ function App(): JSX.Element {
           <Route
             path={AppRoute.Booking}
             element={
-              <PrivateRoute authorizationStatus={authorizationStatus}>
+              <PrivateRoute>
                 <BookingPage/>
               </PrivateRoute>
             }
@@ -48,7 +47,7 @@ function App(): JSX.Element {
           <Route
             path={AppRoute.MyQuests}
             element={
-              <PrivateRoute authorizationStatus={authorizationStatus}>
+              <PrivateRoute>
                 <MyQuestsPage/>
               </PrivateRoute>
             }
