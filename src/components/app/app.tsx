@@ -9,9 +9,20 @@ import LoginPage from '../../pages/login-page/login-page';
 import BookingPage from '../../pages/booking-page/booking-page';
 import MyQuestsPage from '../../pages/my-quests-page/my-quests-page';
 import NotFoundPage from '../../pages/not-found-page/not-found-page';
+import {AppDispatch} from '../../store';
+import {useDispatch} from 'react-redux';
+import {useEffect} from 'react';
+import {checkAuth} from '../../store/user-slice/user-slice';
+import {fetchQuests} from '../../store/quests-slice/quests-slice';
 
 function App(): JSX.Element {
   const authorizationStatus = AuthorizationStatus.NoAuth;
+  const dispatch = useDispatch<AppDispatch>();
+
+  useEffect(() => {
+    void dispatch(checkAuth());
+    void dispatch(fetchQuests());
+  }, [dispatch]);
 
   return (
     <BrowserRouter>
