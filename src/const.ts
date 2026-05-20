@@ -28,4 +28,53 @@ enum APIRoute {
   Reservation = '/reservation',
 }
 
-export {AuthorizationStatus, AppRoute, RequestStatus, APIRoute};
+enum QuestType {
+  All = 'all',
+  Adventures = 'adventures',
+  Horror = 'horror',
+  Mystic = 'mystic',
+  Detective = 'detective',
+  SciFi = 'sci-fi',
+}
+
+enum QuestLevel {
+  Any = 'any',
+  Easy = 'easy',
+  Medium = 'medium',
+  Hard = 'hard',
+}
+
+const QuestTypeName: Record<QuestType, string> = {
+  [QuestType.All]: 'Все квесты',
+  [QuestType.Adventures]: 'Приключения',
+  [QuestType.Horror]: 'Ужасы',
+  [QuestType.Mystic]: 'Мистика',
+  [QuestType.Detective]: 'Детектив',
+  [QuestType.SciFi]: 'Sci-fi',
+};
+
+const QuestLevelName: Record<QuestLevel, string> = {
+  [QuestLevel.Any]: 'Любой',
+  [QuestLevel.Easy]: 'Простой',
+  [QuestLevel.Medium]: 'Средний',
+  [QuestLevel.Hard]: 'Сложный',
+};
+
+const QuestTypes = [
+  QuestType.All,
+  QuestType.Adventures,
+  QuestType.Horror,
+  QuestType.Mystic,
+  QuestType.Detective,
+  QuestType.SciFi,
+];
+
+const QuestLevels = [
+  QuestLevel.Any,
+  QuestLevel.Easy,
+  QuestLevel.Medium,
+  QuestLevel.Hard,
+];
+
+export {AuthorizationStatus, AppRoute, RequestStatus, APIRoute, QuestType, QuestLevel,
+  QuestTypeName, QuestLevelName, QuestTypes, QuestLevels};
