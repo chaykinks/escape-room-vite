@@ -8,19 +8,34 @@ function QuestTypeFilter(): JSX.Element {
   const activeType = useAppSelector(getActiveType);
 
   return (
-    <ul>
-      {QuestTypes.map((type) => (
-        <li key={type}>
-          <button
-            type="button"
-            className={activeType === type ? 'active' : ''}
-            onClick={() => dispatch(changeType(type))}
-          >
-            {QuestTypeName[type]}
-          </button>
-        </li>
-      ))}
-    </ul>
+    <fieldset className="filter__section">
+      <legend className="visually-hidden">
+        Тематика
+      </legend>
+
+      <ul className="filter__list">
+        {QuestTypes.map((type) => (
+          <li className="filter__item" key={type}>
+            <input
+              type="radio"
+              name="type"
+              id={type}
+              checked={activeType === type}
+              onChange={() => dispatch(changeType(type))}
+            />
+
+            <label
+              className="filter__label"
+              htmlFor={type}
+            >
+              <span className="filter__label-text">
+                {QuestTypeName[type]}
+              </span>
+            </label>
+          </li>
+        ))}
+      </ul>
+    </fieldset>
   );
 }
 

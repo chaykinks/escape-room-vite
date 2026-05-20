@@ -1,17 +1,33 @@
 import {useAppSelector} from '../../hooks';
 import {RequestStatus} from '../../const';
+import {getFilteredQuests, getQuestsError, getQuestsRequestStatus} from '../../store/quests-slice/selectors.ts';
+import QuestTypeFilter from '../../components/quest-type-filter/quest-type-filter.tsx';
+import QuestLevelFilter from '../../components/quest-level-filter/quest-level-filter.tsx';
+import QuestCardList from '../../components/quest-card-list/quest-card-list.tsx';
 
 function MainPage(): JSX.Element {
-  const quests = useAppSelector((state) => state.QUESTS.quests);
-  const questsRequestStatus = useAppSelector((state) => state.QUESTS.questsRequestStatus);
-  const questsError = useAppSelector((state) => state.QUESTS.questsError);
+  const quests = useAppSelector(getFilteredQuests);
+  const questsRequestStatus = useAppSelector(getQuestsRequestStatus);
+  const questsError = useAppSelector(getQuestsError);
 
   if (questsRequestStatus === RequestStatus.Loading) {
-    return <main><p>Loading...</p></main>;
+    return (
+      <main className="page-content">
+        <div className="container">
+          <p>Loading...</p>
+        </div>
+      </main>
+    );
   }
 
   if (questsRequestStatus === RequestStatus.Failed) {
-    return <main><p>{questsError}</p></main>;
+    return (
+      <main className="page-content">
+        <div className="container">
+          <p>{questsError}</p>
+        </div>
+      </main>
+    );
   }
 
   return (
@@ -21,7 +37,6 @@ function MainPage(): JSX.Element {
           <h1 className="subtitle page-content__subtitle">
             квесты в Санкт-Петербурге
           </h1>
-
           <h2 className="title title--size-m page-content__title">
             Выберите тематику
           </h2>
@@ -29,68 +44,18 @@ function MainPage(): JSX.Element {
 
         <div className="page-content__item">
           <form className="filter" action="#" method="get">
-            <fieldset className="filter__section">
-              <legend className="visually-hidden">Тематика</legend>
-
-              <ul className="filter__list">
-                <li className="filter__item">
-                  <input type="radio" name="type" id="all" defaultChecked />
-
-                  <label className="filter__label" htmlFor="all">
-                    <svg className="filter__icon" width="26" height="30" aria-hidden="true">
-                      <use xlinkHref="#icon-all-quests"></use>
-                    </svg>
-
-                    <span className="filter__label-text">Все квесты</span>
-                  </label>
-                </li>
-
-                <li className="filter__item">
-                  <input type="radio" name="type" id="adventure" />
-
-                  <label className="filter__label" htmlFor="adventure">
-                    <svg className="filter__icon" width="36" height="30" aria-hidden="true">
-                      <use xlinkHref="#icon-adventure"></use>
-                    </svg>
-
-                    <span className="filter__label-text">Приключения</span>
-                  </label>
-                </li>
-              </ul>
-            </fieldset>
+            <QuestTypeFilter />
+            <QuestLevelFilter />
           </form>
         </div>
 
         <h2 className="title visually-hidden">Выберите квест</h2>
 
-        <div className="cards-grid">
-          {quests.map((quest) => (
-            <div className="quest-card" key={quest.id}>
-              <div className="quest-card__img">
-                <img
-                  src={quest.previewImg}
-                  alt={quest.title}
-                />
-              </div>
-
-              <div className="quest-card__content">
-                <div className="quest-card__info-wrapper">
-                  <div className="quest-card__type">
-                    {quest.type}
-                  </div>
-
-                  <div className="quest-card__level">
-                    {quest.level}
-                  </div>
-                </div>
-
-                <h3 className="quest-card__title">
-                  {quest.title}
-                </h3>
-              </div>
-            </div>
-          ))}
-        </div>
+        {quests.length > 0 ? (
+          <QuestCardList quests={quests} />
+        ) : (
+          <p>По выбранным фильтрам квесты не найдены.</p>
+        )}
       </div>
     </main>
   );

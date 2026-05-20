@@ -9,25 +9,46 @@ function QuestCard({quest}: QuestCardProps): JSX.Element {
   const [minPeople, maxPeople] = quest.peopleMinMax;
 
   return (
-    <li>
-      <Link to={`/quest/${quest.id}`}>
-        <img
-          src={quest.previewImg}
-          srcSet={`${quest.previewImgWebp} 1x`}
-          width="344"
-          height="232"
-          alt={quest.title}
-        />
+    <div className="quest-card">
+      <div className="quest-card__img">
+        <picture>
+          <source
+            type="image/webp"
+            srcSet={quest.previewImgWebp}
+          />
+          <img
+            src={quest.previewImg}
+            width="344"
+            height="232"
+            alt={quest.title}
+          />
+        </picture>
+      </div>
 
-        <h3>{quest.title}</h3>
+      <div className="quest-card__content">
+        <div className="quest-card__info-wrapper">
+          <Link className="quest-card__link" to={`/quest/${quest.id}`}>
+            {quest.title}
+          </Link>
+        </div>
 
-        <p>{quest.level}</p>
+        <ul className="tags quest-card__tags">
+          <li className="tags__item">
+            <svg width="11" height="14" aria-hidden="true">
+              <use xlinkHref="#icon-person" />
+            </svg>
+            {minPeople}–{maxPeople}&nbsp;чел
+          </li>
 
-        <p>
-          {minPeople}–{maxPeople} чел.
-        </p>
-      </Link>
-    </li>
+          <li className="tags__item">
+            <svg width="14" height="14" aria-hidden="true">
+              <use xlinkHref="#icon-level" />
+            </svg>
+            {quest.level}
+          </li>
+        </ul>
+      </div>
+    </div>
   );
 }
 

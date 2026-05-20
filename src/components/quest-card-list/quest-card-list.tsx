@@ -1,18 +1,18 @@
 import {Quest} from '../../types/quest';
 import QuestCard from '../quest-card/quest-card';
 
-type QuestListProps = {
+type QuestCardListProps = {
   quests: Quest[];
 };
 
-function QuestList({quests}: QuestListProps): JSX.Element {
+function QuestCardList({quests}: QuestCardListProps): JSX.Element {
   return (
-    <ul>
+    <div className="cards-grid">
       {quests.map((quest) => (
         <QuestCard key={quest.id} quest={quest} />
       ))}
-    </ul>
+    </div>
   );
 }
 
-export default QuestList;
+export default QuestCardList;
