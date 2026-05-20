@@ -1,5 +1,5 @@
 import {BrowserRouter, Route, Routes} from 'react-router-dom';
-import {AppRoute, AuthorizationStatus} from '../../const';
+import {AppRoute} from '../../const';
 import Layout from '../layout/layout';
 import PrivateRoute from '../private-route/private-route';
 import MainPage from '../../pages/main-page/main-page';
@@ -9,15 +9,15 @@ import LoginPage from '../../pages/login-page/login-page';
 import BookingPage from '../../pages/booking-page/booking-page';
 import MyQuestsPage from '../../pages/my-quests-page/my-quests-page';
 import NotFoundPage from '../../pages/not-found-page/not-found-page';
-import {AppDispatch} from '../../store';
-import {useDispatch} from 'react-redux';
+import {AppDispatch, RootState} from '../../store';
+import {useDispatch, useSelector} from 'react-redux';
 import {useEffect} from 'react';
 import {checkAuth} from '../../store/user-slice/user-slice';
 import {fetchQuests} from '../../store/quests-slice/quests-slice';
 
 function App(): JSX.Element {
-  const authorizationStatus = AuthorizationStatus.NoAuth;
   const dispatch = useDispatch<AppDispatch>();
+  const authorizationStatus = useSelector((state: RootState) => state.USER.authorizationStatus);
 
   useEffect(() => {
     void dispatch(checkAuth());
