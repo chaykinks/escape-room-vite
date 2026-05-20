@@ -1,4 +1,5 @@
 import {Link} from 'react-router-dom';
+import {AppRoute} from '../../const';
 import {Quest} from '../../types/quest';
 
 type QuestCardProps = {
@@ -27,7 +28,10 @@ function QuestCard({quest}: QuestCardProps): JSX.Element {
 
       <div className="quest-card__content">
         <div className="quest-card__info-wrapper">
-          <Link className="quest-card__link" to={`/quest/${quest.id}`}>
+          <Link
+            className="quest-card__link"
+            to={AppRoute.Quest.replace(':id', quest.id)}
+          >
             {quest.title}
           </Link>
         </div>
