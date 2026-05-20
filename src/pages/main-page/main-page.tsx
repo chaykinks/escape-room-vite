@@ -1,11 +1,10 @@
-import {useSelector} from 'react-redux';
-import {RootState} from '../../store';
+import {useAppSelector} from '../../hooks';
 import {RequestStatus} from '../../const';
 
 function MainPage(): JSX.Element {
-  const quests = useSelector((state: RootState) => state.QUESTS.quests);
-  const questsRequestStatus = useSelector((state: RootState) => state.QUESTS.questsRequestStatus);
-  const questsError = useSelector((state: RootState) => state.QUESTS.questsError);
+  const quests = useAppSelector((state) => state.QUESTS.quests);
+  const questsRequestStatus = useAppSelector((state) => state.QUESTS.questsRequestStatus);
+  const questsError = useAppSelector((state) => state.QUESTS.questsError);
 
   if (questsRequestStatus === RequestStatus.Loading) {
     return <main><p>Loading...</p></main>;

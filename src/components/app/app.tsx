@@ -9,14 +9,13 @@ import LoginPage from '../../pages/login-page/login-page';
 import BookingPage from '../../pages/booking-page/booking-page';
 import MyQuestsPage from '../../pages/my-quests-page/my-quests-page';
 import NotFoundPage from '../../pages/not-found-page/not-found-page';
-import {AppDispatch} from '../../store';
-import {useDispatch} from 'react-redux';
 import {useEffect} from 'react';
 import {checkAuth} from '../../store/user-slice/user-slice';
 import {fetchQuests} from '../../store/quests-slice/quests-slice';
+import {useAppDispatch} from '../../hooks';
 
 function App(): JSX.Element {
-  const dispatch = useDispatch<AppDispatch>();
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
     void dispatch(checkAuth());
