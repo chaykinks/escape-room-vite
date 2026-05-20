@@ -1,18 +1,22 @@
 import {AxiosInstance} from 'axios';
-import {createAsyncThunk, createSlice} from '@reduxjs/toolkit';
-import {APIRoute, RequestStatus} from '../../const';
+import {createAsyncThunk, createSlice, PayloadAction} from '@reduxjs/toolkit';
+import {APIRoute, RequestStatus, QuestType, QuestLevel} from '../../const';
 import {Quest} from '../../types/quest';
 
 type QuestsState = {
   quests: Quest[];
   questsRequestStatus: RequestStatus;
   questsError: string | null;
+  activeType: QuestType;
+  activeLevel: QuestLevel;
 };
 
 const initialState: QuestsState = {
   quests: [],
   questsRequestStatus: RequestStatus.Idle,
   questsError: null,
+  activeType: QuestType.All,
+  activeLevel: QuestLevel.Any,
 };
 
 export const fetchQuests = createAsyncThunk<
@@ -30,7 +34,14 @@ export const fetchQuests = createAsyncThunk<
 const questsSlice = createSlice({
   name: 'quests',
   initialState,
-  reducers: {},
+  reducers: {
+    changeType: (state, action: PayloadAction<QuestType>) => {
+      state.activeType = action.payload;
+    },
+    changeLevel: (state, action: PayloadAction<QuestLevel>) => {
+      state.activeLevel = action.payload;
+    },
+  },
   extraReducers(builder) {
     builder
       .addCase(fetchQuests.pending, (state) => {
@@ -49,4 +60,5 @@ const questsSlice = createSlice({
   },
 });
 
+export const {changeType, changeLevel} = questsSlice.actions;
 export default questsSlice.reducer;
