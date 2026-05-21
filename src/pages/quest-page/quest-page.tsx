@@ -1,9 +1,10 @@
 import {useEffect} from 'react';
-import {Link, Navigate, useParams} from 'react-router-dom';
+import {Link, useParams} from 'react-router-dom';
 import {AppRoute, RequestStatus} from '../../const';
 import {useAppDispatch, useAppSelector} from '../../hooks';
 import {getQuest, getQuestRequestStatus} from '../../store/quest-slice/selectors';
 import {fetchQuest} from '../../store/quest-slice/quest-slice';
+import NotFoundPage from '../not-found-page/not-found-page';
 
 function QuestPage(): JSX.Element {
   const {id} = useParams();
@@ -28,7 +29,7 @@ function QuestPage(): JSX.Element {
   }
 
   if (questRequestStatus === RequestStatus.Failed) {
-    return <Navigate to={AppRoute.NotFound} replace />;
+    return <NotFoundPage />;
   }
 
   if (!quest) {
