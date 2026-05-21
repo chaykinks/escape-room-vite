@@ -19,7 +19,7 @@ function Map({center, markerPosition}: MapProps): JSX.Element {
       center={center}
       zoom={16}
       scrollWheelZoom={false}
-      style={{height: '400px', width: '100%'}}
+      className="map"
     >
       <TileLayer
         attribution=""
