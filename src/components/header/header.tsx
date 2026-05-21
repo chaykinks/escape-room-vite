@@ -1,12 +1,19 @@
 import {Link, NavLink} from 'react-router-dom';
 import {AppRoute, AuthorizationStatus} from '../../const';
+import {useAppDispatch} from '../../hooks';
+import {logout} from '../../store/user-slice/user-slice';
 
 type HeaderProps = {
   authorizationStatus: AuthorizationStatus;
 };
 
 function Header({authorizationStatus}: HeaderProps): JSX.Element {
+  const dispatch = useAppDispatch();
   const isAuth = authorizationStatus === AuthorizationStatus.Auth;
+
+  const handleLogoutClick = () => {
+    dispatch(logout());
+  };
 
   return (
     <header>
@@ -21,7 +28,9 @@ function Header({authorizationStatus}: HeaderProps): JSX.Element {
         )}
 
         {isAuth ? (
-          <button type="button">Выйти</button>
+          <button type="button" onClick={handleLogoutClick}>
+            Выйти
+          </button>
         ) : (
           <NavLink to={AppRoute.Login}>Войти</NavLink>
         )}
