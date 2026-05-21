@@ -58,7 +58,11 @@ export const logout = createAsyncThunk<
 const userSlice = createSlice({
   name: 'user',
   initialState,
-  reducers: {},
+  reducers: {
+    clearAuthError: (state) => {
+      state.authError = null;
+    },
+  },
   extraReducers(builder) {
     builder
       .addCase(checkAuth.pending, (state) => {
@@ -100,4 +104,5 @@ const userSlice = createSlice({
   },
 });
 
+export const {clearAuthError} = userSlice.actions;
 export default userSlice.reducer;

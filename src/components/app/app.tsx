@@ -32,7 +32,14 @@ function App(): JSX.Element {
 
           <Route path={AppRoute.Contacts} element={<ContactsPage/>}/>
 
-          <Route path={AppRoute.Login} element={<LoginPage/>}/>
+          <Route
+            path={AppRoute.Login}
+            element={(
+              <PrivateRoute isReverse>
+                <LoginPage/>
+              </PrivateRoute>
+            )}
+          />
 
           <Route
             path={AppRoute.Booking}
