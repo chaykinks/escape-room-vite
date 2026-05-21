@@ -1,8 +1,47 @@
-import {Link, useParams} from 'react-router-dom';
-import {AppRoute} from '../../const';
+import {useEffect} from 'react';
+import {Link, Navigate, useParams} from 'react-router-dom';
+import {AppRoute, RequestStatus} from '../../const';
+import {useAppDispatch, useAppSelector} from '../../hooks';
+import {getQuest, getQuestRequestStatus} from '../../store/quest-slice/selectors';
+import {fetchQuest} from '../../store/quest-slice/quest-slice';
 
 function QuestPage(): JSX.Element {
   const {id} = useParams();
+  const dispatch = useAppDispatch();
+  const quest = useAppSelector(getQuest);
+  const questRequestStatus = useAppSelector(getQuestRequestStatus);
+
+  useEffect(() => {
+    if (id) {
+      void dispatch(fetchQuest(id));
+    }
+  }, [dispatch, id]);
+
+  if (questRequestStatus === RequestStatus.Loading) {
+    return (
+      <main className="decorated-page quest-page">
+        <div className="container container--size-l">
+          <p>Загрузка квеста...</p>
+        </div>
+      </main>
+    );
+  }
+
+  if (questRequestStatus === RequestStatus.Failed) {
+    return <Navigate to={AppRoute.NotFound} replace />;
+  }
+
+  if (!quest) {
+    return (
+      <main className="decorated-page quest-page">
+        <div className="container container--size-l">
+          <p>Квест не найден</p>
+        </div>
+      </main>
+    );
+  }
+
+  const [minPeople, maxPeople] = quest.peopleMinMax;
 
   return (
     <main className="decorated-page quest-page">
@@ -10,11 +49,10 @@ function QuestPage(): JSX.Element {
         <picture>
           <source
             type="image/webp"
-            srcSet="img/content/maniac/maniac-size-m.webp, img/content/maniac/maniac-size-m@2x.webp 2x"
+            srcSet={quest.coverImgWebp}
           />
           <img
-            src="img/content/maniac/maniac-size-m.jpg"
-            srcSet="img/content/maniac/maniac-size-m@2x.jpg 2x"
+            src={quest.coverImg}
             width="1366"
             height="768"
             alt=""
@@ -25,12 +63,12 @@ function QuestPage(): JSX.Element {
       <div className="container container--size-l">
         <div className="quest-page__content">
           <h1 className="title title--size-l title--uppercase quest-page__title">
-            Маньяк
+            {quest.title}
           </h1>
 
           <p className="subtitle quest-page__subtitle">
             <span className="visually-hidden">Жанр:</span>
-            Ужасы
+            {quest.type}
           </p>
 
           <ul className="tags tags--size-l quest-page__tags">
@@ -38,31 +76,24 @@ function QuestPage(): JSX.Element {
               <svg width="11" height="14" aria-hidden="true">
                 <use xlinkHref="#icon-person" />
               </svg>
-              3–6&nbsp;чел
+              {minPeople}–{maxPeople}&nbsp;чел
             </li>
 
             <li className="tags__item">
               <svg width="14" height="14" aria-hidden="true">
                 <use xlinkHref="#icon-level" />
               </svg>
-              Средний
+              {quest.level}
             </li>
           </ul>
 
           <p className="quest-page__description">
-            В&nbsp;комнате с&nbsp;приглушённым светом несколько человек,
-            незнакомых друг с&nbsp;другом, приходят в&nbsp;себя. Никто
-            не&nbsp;помнит, что произошло прошлым вечером. Руки и&nbsp;ноги
-            связаны, но&nbsp;одному из&nbsp;вас получилось освободиться.
-            На&nbsp;стене висит пугающий таймер и&nbsp;запущен отсчёт
-            60&nbsp;минут. Сможете&nbsp;ли вы&nbsp;разобраться
-            в&nbsp;стрессовой ситуации, помочь другим, разобраться что
-            произошло и&nbsp;выбраться из&nbsp;комнаты?
+            {quest.description}
           </p>
 
           <Link
             className="btn btn--accent btn--cta quest-page__btn"
-            to={AppRoute.Booking.replace(':id', id ?? '')}
+            to={AppRoute.Booking.replace(':id', quest.id)}
           >
             Забронировать
           </Link>
