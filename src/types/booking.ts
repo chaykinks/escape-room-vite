@@ -23,6 +23,7 @@ type BookingData = {
   phone: string;
   peopleCount: number;
   placeId: string;
+  withChildren: boolean;
 };
 
 export type {Slot, BookingPlace, BookingData};

@@ -17,6 +17,7 @@ type BookingFormData = {
   contactPerson: string;
   phone: string;
   peopleCount: number;
+  withChildren: boolean;
 };
 
 function BookingPage(): JSX.Element {
@@ -97,6 +98,7 @@ function BookingPage(): JSX.Element {
         contactPerson: data.contactPerson,
         phone: data.phone,
         peopleCount: data.peopleCount,
+        withChildren: data.withChildren,
       })
     );
 
@@ -291,7 +293,12 @@ function BookingPage(): JSX.Element {
             </div>
 
             <label className="custom-checkbox booking-form__checkbox booking-form__checkbox--children">
-              <input id="children" name="children" type="checkbox" defaultChecked />
+              <input
+                id="children"
+                type="checkbox"
+                defaultChecked
+                {...register('withChildren')}
+              />
               <span className="custom-checkbox__icon">
                 <svg width="20" height="17" aria-hidden="true">
                   <use xlinkHref="#icon-tick" />
