@@ -11,7 +11,7 @@ function ReservationList({
   onCancelClick,
 }: ReservationListProps): JSX.Element {
   return (
-    <ul>
+    <div className="cards-grid">
       {reservations.map((reservation) => (
         <ReservationCard
           key={reservation.id}
@@ -19,7 +19,7 @@ function ReservationList({
           onCancelClick={onCancelClick}
         />
       ))}
-    </ul>
+    </div>
   );
 }
 
