@@ -30,7 +30,7 @@ function BookingMap({
   return (
     <MapContainer
       center={firstPlace.location.coords}
-      zoom={13}
+      zoom={10}
       scrollWheelZoom={false}
       className="map"
     >

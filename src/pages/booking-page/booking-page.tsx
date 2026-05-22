@@ -38,16 +38,21 @@ function BookingPage(): JSX.Element {
 
   useEffect(() => {
     if (id) {
+      setSelectedPlaceId(null);
+      setSelectedDate(null);
+      setSelectedTime(null);
+      setSlotError(null);
+
       void dispatch(fetchQuest(id));
       void dispatch(fetchBookingInfo(id));
     }
   }, [dispatch, id]);
 
   useEffect(() => {
-    if (bookingInfo.length > 0 && selectedPlaceId === null) {
+    if (bookingInfo.length > 0) {
       setSelectedPlaceId(bookingInfo[0].id);
     }
-  }, [bookingInfo, selectedPlaceId]);
+  }, [bookingInfo]);
 
   const selectedPlace = bookingInfo.find((place) => place.id === selectedPlaceId);
   const [minPeople, maxPeople] = quest?.peopleMinMax ?? [2, 10];
@@ -91,7 +96,7 @@ function BookingPage(): JSX.Element {
         time: selectedTime,
         contactPerson: data.contactPerson,
         phone: data.phone,
-        peopleCount: Number(data.peopleCount),
+        peopleCount: data.peopleCount,
       })
     );
 
