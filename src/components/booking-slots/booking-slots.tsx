@@ -20,29 +20,35 @@ function BookingSlots({
   onSlotSelect,
 }: BookingSlotsProps): JSX.Element {
   return (
-    <fieldset>
-      <legend>{title}</legend>
+    <fieldset className="booking-form__date-section">
+      <legend className="booking-form__date-title">
+        {title}
+      </legend>
 
-      {slots.map((slot) => {
-        const isSelected =
-          selectedDate === date && selectedTime === slot.time;
+      <div className="booking-form__date-inner-wrapper">
+        {slots.map((slot) => {
+          const isSelected = selectedDate === date && selectedTime === slot.time;
+          const inputId = `${date}-${slot.time.replace(':', 'h')}m`;
 
-        return (
-          <label key={slot.time}>
-            <input
-              type="radio"
-              name="time"
-              value={`${date}-${slot.time}`}
-              disabled={!slot.isAvailable}
-              checked={isSelected}
-              onChange={() => onSlotSelect(date, slot.time)}
-            />
-            <span>
-              {slot.time}
-            </span>
-          </label>
-        );
-      })}
+          return (
+            <label className="custom-radio booking-form__date" key={slot.time}>
+              <input
+                id={inputId}
+                type="radio"
+                name="date"
+                value={`${date}-${slot.time}`}
+                disabled={!slot.isAvailable}
+                checked={isSelected}
+                onChange={() => onSlotSelect(date, slot.time)}
+              />
+
+              <span className="custom-radio__label">
+                {slot.time}
+              </span>
+            </label>
+          );
+        })}
+      </div>
     </fieldset>
   );
 }
