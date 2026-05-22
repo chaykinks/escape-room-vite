@@ -1,4 +1,5 @@
 import {Link} from 'react-router-dom';
+import {AppRoute} from '../../const';
 import {Reservation} from '../../types/reservation';
 
 type ReservationCardProps = {
@@ -10,39 +11,62 @@ function ReservationCard({
   reservation,
   onCancelClick,
 }: ReservationCardProps): JSX.Element {
-  const [minPeople, maxPeople] = reservation.quest.peopleMinMax;
-
   return (
-    <li>
-      <Link to={`/quest/${reservation.quest.id}`}>
-        <img
-          src={reservation.quest.previewImg}
-          srcSet={`${reservation.quest.previewImgWebp} 1x`}
-          width="344"
-          height="232"
-          alt={reservation.quest.title}
-        />
+    <div className="quest-card">
+      <div className="quest-card__img">
+        <picture>
+          <source
+            type="image/webp"
+            srcSet={reservation.quest.previewImgWebp}
+          />
+          <img
+            src={reservation.quest.previewImg}
+            width="344"
+            height="232"
+            alt={reservation.quest.title}
+          />
+        </picture>
+      </div>
 
-        <h3>{reservation.quest.title}</h3>
-      </Link>
+      <div className="quest-card__content">
+        <div className="quest-card__info-wrapper">
+          <Link
+            className="quest-card__link"
+            to={AppRoute.Quest.replace(':id', reservation.quest.id)}
+          >
+            {reservation.quest.title}
+          </Link>
 
-      <p>{reservation.quest.level}</p>
-      <p>
-        {minPeople}–{maxPeople} чел.
-      </p>
+          <span className="quest-card__info">
+            [{reservation.date},&nbsp;{reservation.time}. {reservation.location.address}]
+          </span>
+        </div>
 
-      <p>Адрес: {reservation.location.address}</p>
-      <p>Дата: {reservation.date}</p>
-      <p>Время: {reservation.time}</p>
-      <p>Участников: {reservation.peopleCount}</p>
+        <ul className="tags quest-card__tags">
+          <li className="tags__item">
+            <svg width="11" height="14" aria-hidden="true">
+              <use xlinkHref="#icon-person" />
+            </svg>
+            {reservation.peopleCount}&nbsp;чел
+          </li>
 
-      <button
-        type="button"
-        onClick={() => onCancelClick(reservation.id)}
-      >
-        Отменить
-      </button>
-    </li>
+          <li className="tags__item">
+            <svg width="14" height="14" aria-hidden="true">
+              <use xlinkHref="#icon-level" />
+            </svg>
+            {reservation.quest.level}
+          </li>
+        </ul>
+
+        <button
+          className="btn btn--accent btn--secondary quest-card__btn"
+          type="button"
+          onClick={() => onCancelClick(reservation.id)}
+        >
+          Отменить
+        </button>
+      </div>
+    </div>
   );
 }
 
