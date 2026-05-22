@@ -32,7 +32,7 @@ function BookingMap({
       center={firstPlace.location.coords}
       zoom={13}
       scrollWheelZoom={false}
-      style={{height: '400px', width: '100%'}}
+      className="map"
     >
       <TileLayer
         attribution=""

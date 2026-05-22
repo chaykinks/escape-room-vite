@@ -1,12 +1,138 @@
-import {FormEvent} from 'react';
-import Map from '../../components/map/map';
+import {useEffect, useState} from 'react';
+import {Navigate, useNavigate, useParams} from 'react-router-dom';
+import {SubmitHandler, useForm} from 'react-hook-form';
+import {AppRoute, RequestStatus} from '../../const';
+import {useAppDispatch, useAppSelector} from '../../hooks';
+import {fetchQuest} from '../../store/quest-slice/quest-slice';
+import {getQuest} from '../../store/quest-slice/selectors';
+import {fetchBookingInfo, sendBooking} from '../../store/booking-slice/booking-slice';
+import {getBookingInfo, getBookingInfoError, getBookingInfoRequestStatus,
+  getSendBookingError, getSendBookingRequestStatus} from '../../store/booking-slice/selectors';
+import BookingMap from '../../components/booking-map/booking-map';
+import BookingSlots from '../../components/booking-slots/booking-slots';
 
-const OFFICE_COORDINATES: [number, number] = [59.968322, 30.317359];
+type DateType = 'today' | 'tomorrow';
+
+type BookingFormData = {
+  contactPerson: string;
+  phone: string;
+  peopleCount: number;
+};
 
 function BookingPage(): JSX.Element {
-  const handleSubmit = (evt: FormEvent<HTMLFormElement>) => {
-    evt.preventDefault();
+  const {id} = useParams();
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+
+  const quest = useAppSelector(getQuest);
+  const bookingInfo = useAppSelector(getBookingInfo);
+  const bookingInfoRequestStatus = useAppSelector(getBookingInfoRequestStatus);
+  const bookingInfoError = useAppSelector(getBookingInfoError);
+  const sendBookingRequestStatus = useAppSelector(getSendBookingRequestStatus);
+  const sendBookingError = useAppSelector(getSendBookingError);
+
+  const [selectedPlaceId, setSelectedPlaceId] = useState<string | null>(null);
+  const [selectedDate, setSelectedDate] = useState<DateType | null>(null);
+  const [selectedTime, setSelectedTime] = useState<string | null>(null);
+  const [slotError, setSlotError] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (id) {
+      void dispatch(fetchQuest(id));
+      void dispatch(fetchBookingInfo(id));
+    }
+  }, [dispatch, id]);
+
+  useEffect(() => {
+    if (bookingInfo.length > 0 && selectedPlaceId === null) {
+      setSelectedPlaceId(bookingInfo[0].id);
+    }
+  }, [bookingInfo, selectedPlaceId]);
+
+  const selectedPlace = bookingInfo.find((place) => place.id === selectedPlaceId);
+  const [minPeople, maxPeople] = quest?.peopleMinMax ?? [2, 10];
+
+  const {
+    register,
+    handleSubmit,
+    formState: {errors},
+  } = useForm<BookingFormData>({
+    defaultValues: {
+      contactPerson: '',
+      phone: '',
+      peopleCount: minPeople,
+    },
+  });
+
+  const handlePlaceSelect = (placeId: string) => {
+    setSelectedPlaceId(placeId);
+    setSelectedDate(null);
+    setSelectedTime(null);
+    setSlotError(null);
   };
+
+  const handleSlotSelect = (date: DateType, time: string) => {
+    setSelectedDate(date);
+    setSelectedTime(time);
+    setSlotError(null);
+  };
+
+  const onSubmit: SubmitHandler<BookingFormData> = async (data) => {
+    if (!id || !selectedPlaceId || !selectedDate || !selectedTime) {
+      setSlotError('Select place, date and time of booking');
+      return;
+    }
+
+    const result = await dispatch(
+      sendBooking({
+        questId: id,
+        placeId: selectedPlaceId,
+        date: selectedDate,
+        time: selectedTime,
+        contactPerson: data.contactPerson,
+        phone: data.phone,
+        peopleCount: Number(data.peopleCount),
+      })
+    );
+
+    if (sendBooking.fulfilled.match(result)) {
+      navigate(AppRoute.MyQuests);
+    }
+  };
+
+  if (!id) {
+    return <Navigate to={AppRoute.Root} replace />;
+  }
+
+  if (bookingInfoRequestStatus === RequestStatus.Loading) {
+    return (
+      <main className="page-content decorated-page">
+        <div className="container container--size-s">
+          <p>Loading booking info...</p>
+        </div>
+      </main>
+    );
+  }
+
+  if (bookingInfoRequestStatus === RequestStatus.Failed) {
+    return (
+      <main className="page-content decorated-page">
+        <div className="container container--size-s">
+          <p>{bookingInfoError}</p>
+        </div>
+      </main>
+    );
+  }
+
+  if (!selectedPlace || bookingInfo.length === 0) {
+    return (
+      <main className="page-content decorated-page">
+        <div className="container container--size-s">
+          <p>There is no available places for booking</p>
+        </div>
+      </main>
+    );
+  }
 
   return (
     <main className="page-content decorated-page">
@@ -14,11 +140,10 @@ function BookingPage(): JSX.Element {
         <picture>
           <source
             type="image/webp"
-            srcSet="img/content/maniac/maniac-bg-size-m.webp, img/content/maniac/maniac-bg-size-m@2x.webp 2x"
+            srcSet={quest?.coverImgWebp}
           />
           <img
-            src="img/content/maniac/maniac-bg-size-m.jpg"
-            srcSet="img/content/maniac/maniac-bg-size-m@2x.jpg 2x"
+            src={quest?.coverImg}
             width="1366"
             height="1959"
             alt=""
@@ -31,22 +156,22 @@ function BookingPage(): JSX.Element {
           <h1 className="subtitle subtitle--size-l page-content__subtitle">
             Бронирование квеста
           </h1>
+
           <p className="title title--size-m title--uppercase page-content__title">
-            Маньяк
+            {quest?.title}
           </p>
         </div>
 
         <div className="page-content__item">
           <div className="booking-map">
-            <div className="map">
-              <Map
-                center={OFFICE_COORDINATES}
-                markerPosition={OFFICE_COORDINATES}
-              />
-            </div>
+            <BookingMap
+              places={bookingInfo}
+              selectedPlaceId={selectedPlace.id}
+              onPlaceSelect={handlePlaceSelect}
+            />
 
             <p className="booking-map__address">
-              Вы&nbsp;выбрали: наб. реки Карповки&nbsp;5, лит&nbsp;П, м. Петроградская
+              Вы&nbsp;выбрали: {selectedPlace.location.address}
             </p>
           </div>
         </div>
@@ -55,90 +180,109 @@ function BookingPage(): JSX.Element {
           className="booking-form"
           action="#"
           method="post"
-          onSubmit={handleSubmit}
+          onSubmit={(evt) => {
+            void handleSubmit(onSubmit)(evt);
+          }}
         >
           <fieldset className="booking-form__section">
             <legend className="visually-hidden">Выбор даты и времени</legend>
 
-            <fieldset className="booking-form__date-section">
-              <legend className="booking-form__date-title">Сегодня</legend>
+            <BookingSlots
+              title="Сегодня"
+              date="today"
+              slots={selectedPlace.slots.today}
+              selectedDate={selectedDate}
+              selectedTime={selectedTime}
+              onSlotSelect={handleSlotSelect}
+            />
 
-              <div className="booking-form__date-inner-wrapper">
-                <label className="custom-radio booking-form__date">
-                  <input id="today9h45m" name="date" required type="radio" value="today9h45m" />
-                  <span className="custom-radio__label">9:45</span>
-                </label>
-
-                <label className="custom-radio booking-form__date">
-                  <input id="today15h00m" name="date" required type="radio" value="today15h00m" defaultChecked />
-                  <span className="custom-radio__label">15:00</span>
-                </label>
-
-                <label className="custom-radio booking-form__date">
-                  <input id="today17h30m" name="date" required type="radio" value="today17h30m" />
-                  <span className="custom-radio__label">17:30</span>
-                </label>
-
-                <label className="custom-radio booking-form__date">
-                  <input id="today19h30m" name="date" required type="radio" value="today19h30m" disabled />
-                  <span className="custom-radio__label">19:30</span>
-                </label>
-
-                <label className="custom-radio booking-form__date">
-                  <input id="today21h30m" name="date" required type="radio" value="today21h30m" />
-                  <span className="custom-radio__label">21:30</span>
-                </label>
-              </div>
-            </fieldset>
-
-            <fieldset className="booking-form__date-section">
-              <legend className="booking-form__date-title">Завтра</legend>
-
-              <div className="booking-form__date-inner-wrapper">
-                <label className="custom-radio booking-form__date">
-                  <input id="tomorrow11h00m" name="date" required type="radio" value="tomorrow11h00m" />
-                  <span className="custom-radio__label">11:00</span>
-                </label>
-
-                <label className="custom-radio booking-form__date">
-                  <input id="tomorrow15h00m" name="date" required type="radio" value="tomorrow15h00m" disabled />
-                  <span className="custom-radio__label">15:00</span>
-                </label>
-
-                <label className="custom-radio booking-form__date">
-                  <input id="tomorrow17h30m" name="date" required type="radio" value="tomorrow17h30m" disabled />
-                  <span className="custom-radio__label">17:30</span>
-                </label>
-
-                <label className="custom-radio booking-form__date">
-                  <input id="tomorrow19h45m" name="date" required type="radio" value="tomorrow19h45m" />
-                  <span className="custom-radio__label">19:45</span>
-                </label>
-
-                <label className="custom-radio booking-form__date">
-                  <input id="tomorrow21h30m" name="date" required type="radio" value="tomorrow21h30m" />
-                  <span className="custom-radio__label">21:30</span>
-                </label>
-              </div>
-            </fieldset>
+            <BookingSlots
+              title="Завтра"
+              date="tomorrow"
+              slots={selectedPlace.slots.tomorrow}
+              selectedDate={selectedDate}
+              selectedTime={selectedTime}
+              onSlotSelect={handleSlotSelect}
+            />
           </fieldset>
 
           <fieldset className="booking-form__section">
             <legend className="visually-hidden">Контактная информация</legend>
 
+            {(slotError || errors.contactPerson || errors.phone || errors.peopleCount || sendBookingError) && (
+              <div style={{color: '#f2890f', marginBottom: '20px'}}>
+                {slotError && <p>{slotError}</p>}
+                {errors.contactPerson && <p>{errors.contactPerson.message}</p>}
+                {errors.phone && <p>{errors.phone.message}</p>}
+                {errors.peopleCount && <p>{errors.peopleCount.message}</p>}
+                {sendBookingError && <p>{sendBookingError}</p>}
+              </div>
+            )}
+
             <div className="custom-input booking-form__input">
-              <label className="custom-input__label" htmlFor="name">Ваше имя</label>
-              <input id="name" name="name" pattern="[А-Яа-яЁёA-Za-z'- ]{1,}" placeholder="Имя" required type="text" />
+              <label className="custom-input__label" htmlFor="name">
+                Ваше имя
+              </label>
+
+              <input
+                id="name"
+                type="text"
+                placeholder="Имя"
+                {...register('contactPerson', {
+                  required: 'Введите имя',
+                  minLength: {
+                    value: 1,
+                    message: 'Имя должно быть от 1 до 15 символов',
+                  },
+                  maxLength: {
+                    value: 15,
+                    message: 'Имя должно быть от 1 до 15 символов',
+                  },
+                })}
+              />
             </div>
 
             <div className="custom-input booking-form__input">
-              <label className="custom-input__label" htmlFor="tel">Контактный телефон</label>
-              <input id="tel" name="tel" pattern="[0-9]{10,}" placeholder="Телефон" required type="tel" />
+              <label className="custom-input__label" htmlFor="tel">
+                Контактный телефон
+              </label>
+
+              <input
+                id="tel"
+                type="tel"
+                placeholder="+7 (000) 000-00-00"
+                {...register('phone', {
+                  required: 'Введите телефон',
+                  pattern: {
+                    value: /^\+7 \(\d{3}\) \d{3}-\d{2}-\d{2}$/,
+                    message: 'Введите телефон в формате +7 (000) 000-00-00',
+                  },
+                })}
+              />
             </div>
 
             <div className="custom-input booking-form__input">
-              <label className="custom-input__label" htmlFor="person">Количество участников</label>
-              <input id="person" name="person" placeholder="Количество участников" required type="number" />
+              <label className="custom-input__label" htmlFor="person">
+                Количество участников
+              </label>
+
+              <input
+                id="person"
+                type="number"
+                placeholder="Количество участников"
+                {...register('peopleCount', {
+                  required: 'Введите количество участников',
+                  valueAsNumber: true,
+                  min: {
+                    value: minPeople,
+                    message: `Минимум участников: ${minPeople}`,
+                  },
+                  max: {
+                    value: maxPeople,
+                    message: `Максимум участников: ${maxPeople}`,
+                  },
+                })}
+              />
             </div>
 
             <label className="custom-checkbox booking-form__checkbox booking-form__checkbox--children">
@@ -152,8 +296,14 @@ function BookingPage(): JSX.Element {
             </label>
           </fieldset>
 
-          <button className="btn btn--accent btn--cta booking-form__submit" type="submit">
-            Забронировать
+          <button
+            className="btn btn--accent btn--cta booking-form__submit"
+            type="submit"
+            disabled={sendBookingRequestStatus === RequestStatus.Loading}
+          >
+            {sendBookingRequestStatus === RequestStatus.Loading
+              ? 'Отправляем...'
+              : 'Забронировать'}
           </button>
 
           <label className="custom-checkbox booking-form__checkbox booking-form__checkbox--agreement">
