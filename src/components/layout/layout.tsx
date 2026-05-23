@@ -1,5 +1,6 @@
 import {Outlet} from 'react-router-dom';
 import Header from '../header/header';
+import Footer from '../footer/footer';
 import {useAppSelector} from '../../hooks';
 
 function Layout(): JSX.Element {
@@ -9,6 +10,7 @@ function Layout(): JSX.Element {
     <>
       <Header authorizationStatus={authorizationStatus} />
       <Outlet />
+      <Footer />
     </>
   );
 }
