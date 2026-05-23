@@ -6,6 +6,10 @@ import {clearAuthError, login} from '../../store/user-slice/user-slice';
 import {getAuthError} from '../../store/user-slice/selectors';
 import {AuthData} from '../../types/user';
 
+type LoginFormData = AuthData & {
+  agreement: boolean;
+};
+
 function LoginPage(): JSX.Element {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
@@ -15,18 +19,19 @@ function LoginPage(): JSX.Element {
     register,
     handleSubmit,
     formState: {errors},
-  } = useForm<AuthData>({
+  } = useForm<LoginFormData>({
     defaultValues: {
       email: '',
       password: '',
+      agreement: false,
     },
   });
 
-  const onSubmit: SubmitHandler<AuthData> = async (data) => {
+  const onSubmit: SubmitHandler<LoginFormData> = async (data) => {
     dispatch(clearAuthError());
 
     try {
-      await dispatch(login(data)).unwrap();
+      await dispatch(login({email: data.email, password: data.password})).unwrap();
       navigate(AppRoute.Root);
     } catch (error) {
       void error;
@@ -112,13 +117,39 @@ function LoginPage(): JSX.Element {
                 </div>
               </div>
 
-              {(errors.email || errors.password || authError) && (
+              {(errors.email || errors.password || errors.agreement || authError) && (
                 <div style={{color: '#f2890f', marginTop: '10px'}}>
                   {errors.email && <p>{errors.email.message}</p>}
                   {errors.password && <p>{errors.password.message}</p>}
+                  {errors.agreement && <p>{errors.agreement.message}</p>}
                   {authError && <p>{authError}</p>}
                 </div>
               )}
+
+              <label className="custom-checkbox login-form__checkbox">
+                <input
+                  type="checkbox"
+                  {...register('agreement', {
+                    required: 'Необходимо согласиться с пользовательским соглашением',
+                  })}
+                />
+
+                <span className="custom-checkbox__icon">
+                  <svg width="20" height="17" aria-hidden="true">
+                    <use xlinkHref="#icon-tick" />
+                  </svg>
+                </span>
+
+                <span className="custom-checkbox__label">
+                  Я&nbsp;согласен с&nbsp;
+                  <a
+                    className="link link--active-silver link--underlined"
+                    href="#"
+                  >
+                    пользовательским соглашением
+                  </a>
+                </span>
+              </label>
 
               <button
                 className="btn btn--accent btn--general login-form__submit"
