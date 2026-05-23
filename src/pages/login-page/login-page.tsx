@@ -126,31 +126,6 @@ function LoginPage(): JSX.Element {
                 </div>
               )}
 
-              <label className="custom-checkbox login-form__checkbox">
-                <input
-                  type="checkbox"
-                  {...register('agreement', {
-                    required: 'Необходимо согласиться с пользовательским соглашением',
-                  })}
-                />
-
-                <span className="custom-checkbox__icon">
-                  <svg width="20" height="17" aria-hidden="true">
-                    <use xlinkHref="#icon-tick" />
-                  </svg>
-                </span>
-
-                <span className="custom-checkbox__label">
-                  Я&nbsp;согласен с&nbsp;
-                  <a
-                    className="link link--active-silver link--underlined"
-                    href="#"
-                  >
-                    пользовательским соглашением
-                  </a>
-                </span>
-              </label>
-
               <button
                 className="btn btn--accent btn--general login-form__submit"
                 type="submit"
@@ -158,6 +133,29 @@ function LoginPage(): JSX.Element {
                 Войти
               </button>
             </div>
+
+            <label className="custom-checkbox login-form__checkbox">
+              <input
+                type="checkbox"
+                {...register('agreement', {
+                  required: 'Необходимо согласиться с пользовательским соглашением',
+                })}
+              />
+
+              <span className="custom-checkbox__icon">
+                <svg width="20" height="17" aria-hidden="true">
+                  <use xlinkHref="#icon-tick" />
+                </svg>
+              </span>
+
+              <span className="custom-checkbox__label">
+              Я&nbsp;согласен с&nbsp;
+                <a className="link link--active-silver link--underlined" href="#">
+                правилами обработки персональных данных
+                </a>
+                &nbsp;и пользовательским соглашением
+              </span>
+            </label>
           </form>
         </div>
       </div>
