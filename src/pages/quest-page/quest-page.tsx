@@ -1,4 +1,4 @@
-import {useEffect} from 'react';
+import {useEffect, useState} from 'react';
 import {Link, useParams} from 'react-router-dom';
 import {AppRoute, RequestStatus} from '../../const';
 import {useAppDispatch, useAppSelector} from '../../hooks';
@@ -6,15 +6,29 @@ import {getQuest, getQuestRequestStatus} from '../../store/quest-slice/selectors
 import {fetchQuest} from '../../store/quest-slice/quest-slice';
 import NotFoundPage from '../not-found-page/not-found-page';
 
+function getSizeMImage(image: string): string {
+  return image
+    .replace('@2x.jpg', '-size-m.jpg')
+    .replace('@2x.webp', '-size-m.webp');
+}
+
+function getSizeMImage2x(image: string): string {
+  return image
+    .replace('@2x.jpg', '-size-m@2x.jpg')
+    .replace('@2x.webp', '-size-m@2x.webp');
+}
+
 function QuestPage(): JSX.Element {
   const {id} = useParams();
   const dispatch = useAppDispatch();
   const quest = useAppSelector(getQuest);
   const questRequestStatus = useAppSelector(getQuestRequestStatus);
+  const [isDefaultCover, setIsDefaultCover] = useState(false);
 
   useEffect(() => {
     if (id) {
       void dispatch(fetchQuest(id));
+      setIsDefaultCover(false);
     }
   }, [dispatch, id]);
 
@@ -44,19 +58,35 @@ function QuestPage(): JSX.Element {
 
   const [minPeople, maxPeople] = quest.peopleMinMax;
 
+  const coverImg = isDefaultCover ? quest.coverImg : getSizeMImage(quest.coverImg);
+  const coverImg2x = isDefaultCover ? quest.coverImg : getSizeMImage2x(quest.coverImg);
+
+  const coverImgWebp = isDefaultCover
+    ? quest.coverImgWebp
+    : getSizeMImage(quest.coverImgWebp);
+
+  const coverImgWebp2x = isDefaultCover
+    ? quest.coverImgWebp
+    : getSizeMImage2x(quest.coverImgWebp);
+
   return (
     <main className="decorated-page quest-page">
       <div className="decorated-page__decor" aria-hidden="true">
         <picture>
           <source
             type="image/webp"
-            srcSet={quest.coverImgWebp}
+            srcSet={`${coverImgWebp}, ${coverImgWebp2x} 2x`}
           />
+
           <img
-            src={quest.coverImg}
+            src={coverImg}
+            srcSet={`${coverImg2x} 2x`}
             width="1366"
             height="768"
             alt=""
+            onError={() => {
+              setIsDefaultCover(true);
+            }}
           />
         </picture>
       </div>
@@ -88,9 +118,7 @@ function QuestPage(): JSX.Element {
             </li>
           </ul>
 
-          <p className="quest-page__description">
-            {quest.description}
-          </p>
+          <p className="quest-page__description">{quest.description}</p>
 
           <Link
             className="btn btn--accent btn--cta quest-page__btn"
