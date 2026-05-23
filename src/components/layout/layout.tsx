@@ -7,11 +7,21 @@ function Layout(): JSX.Element {
   const authorizationStatus = useAppSelector((state) => state.USER.authorizationStatus);
 
   return (
-    <>
+    <div
+      style={{
+        minHeight: '100vh',
+        display: 'flex',
+        flexDirection: 'column',
+      }}
+    >
       <Header authorizationStatus={authorizationStatus} />
-      <Outlet />
+
+      <div style={{flexGrow: 1}}>
+        <Outlet />
+      </div>
+
       <Footer />
-    </>
+    </div>
   );
 }
 
