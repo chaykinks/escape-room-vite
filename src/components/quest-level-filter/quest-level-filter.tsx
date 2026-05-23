@@ -1,4 +1,4 @@
-import {QuestLevelName, QuestLevels} from '../../const';
+import {QUEST_LEVEL_NAME, QUEST_LEVELS} from '../../const';
 import {useAppDispatch, useAppSelector} from '../../hooks';
 import {changeLevel} from '../../store/quests-slice/quests-slice';
 import {getActiveLevel} from '../../store/quests-slice/selectors';
@@ -14,7 +14,7 @@ function QuestLevelFilter(): JSX.Element {
       </legend>
 
       <ul className="filter__list">
-        {QuestLevels.map((level) => (
+        {QUEST_LEVELS.map((level) => (
           <li className="filter__item" key={level}>
             <input
               type="radio"
@@ -29,7 +29,7 @@ function QuestLevelFilter(): JSX.Element {
               htmlFor={level}
             >
               <span className="filter__label-text">
-                {QuestLevelName[level]}
+                {QUEST_LEVEL_NAME[level]}
               </span>
             </label>
           </li>

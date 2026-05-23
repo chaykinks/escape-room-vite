@@ -44,7 +44,7 @@ enum QuestLevel {
   Hard = 'hard',
 }
 
-const QuestTypeName: Record<QuestType, string> = {
+const QUEST_TYPE_NAME: Record<QuestType, string> = {
   [QuestType.All]: 'Все квесты',
   [QuestType.Adventures]: 'Приключения',
   [QuestType.Horror]: 'Ужасы',
@@ -53,14 +53,14 @@ const QuestTypeName: Record<QuestType, string> = {
   [QuestType.SciFi]: 'Sci-fi',
 };
 
-const QuestLevelName: Record<QuestLevel, string> = {
+const QUEST_LEVEL_NAME: Record<QuestLevel, string> = {
   [QuestLevel.Any]: 'Любой',
   [QuestLevel.Easy]: 'Простой',
   [QuestLevel.Medium]: 'Средний',
   [QuestLevel.Hard]: 'Сложный',
 };
 
-const QuestTypes = [
+const QUEST_TYPES = [
   QuestType.All,
   QuestType.Adventures,
   QuestType.Horror,
@@ -69,7 +69,7 @@ const QuestTypes = [
   QuestType.SciFi,
 ];
 
-const QuestLevels = [
+const QUEST_LEVELS = [
   QuestLevel.Any,
   QuestLevel.Easy,
   QuestLevel.Medium,
@@ -77,4 +77,4 @@ const QuestLevels = [
 ];
 
 export {AuthorizationStatus, AppRoute, RequestStatus, APIRoute, QuestType, QuestLevel,
-  QuestTypeName, QuestLevelName, QuestTypes, QuestLevels};
+  QUEST_TYPE_NAME, QUEST_LEVEL_NAME, QUEST_TYPES, QUEST_LEVELS};
