@@ -79,10 +79,10 @@ function Header({authorizationStatus}: HeaderProps): JSX.Element {
               </button>
             ) : (
               <NavLink
-                className="btn btn--accent header__side-item"
+                className="btn header__side-item header__login-btn"
                 to={AppRoute.Login}
               >
-                Войти
+                Вход
               </NavLink>
             )
           )}
