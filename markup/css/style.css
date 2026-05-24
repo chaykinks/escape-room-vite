@@ -2021,3 +2021,15 @@ button,
     opacity: 1;
   }
 }
+
+.leaflet-container img {
+  width: auto;
+  height: auto;
+  max-width: none !important;
+  max-height: none;
+}
+
+.leaflet-marker-icon,
+.leaflet-marker-shadow {
+  display: block;
+}
