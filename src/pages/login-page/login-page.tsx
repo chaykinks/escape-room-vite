@@ -1,5 +1,5 @@
 import {SubmitHandler, useForm} from 'react-hook-form';
-import {useNavigate} from 'react-router-dom';
+import {useLocation, useNavigate} from 'react-router-dom';
 import {AppRoute} from '../../const';
 import {useAppDispatch, useAppSelector} from '../../hooks';
 import {clearAuthError, login} from '../../store/user-slice/user-slice';
@@ -10,10 +10,24 @@ type LoginFormData = AuthData & {
   agreement: boolean;
 };
 
+type RedirectLocationState = {
+  redirectPath?: {
+    pathname: string;
+    search: string;
+    hash: string;
+  };
+};
+
 function LoginPage(): JSX.Element {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
+  const location = useLocation();
   const authError = useAppSelector(getAuthError);
+
+  const locationState = location.state as RedirectLocationState | null;
+  const redirectPath = locationState?.redirectPath
+    ? `${locationState.redirectPath.pathname}${locationState.redirectPath.search}${locationState.redirectPath.hash}`
+    : AppRoute.Root;
 
   const {
     register,
@@ -32,7 +46,7 @@ function LoginPage(): JSX.Element {
 
     try {
       await dispatch(login({email: data.email, password: data.password})).unwrap();
-      navigate(AppRoute.Root);
+      navigate(redirectPath, {replace: true});
     } catch (error) {
       void error;
     }
@@ -149,9 +163,9 @@ function LoginPage(): JSX.Element {
               </span>
 
               <span className="custom-checkbox__label">
-              Я&nbsp;согласен с&nbsp;
+                Я&nbsp;согласен с&nbsp;
                 <a className="link link--active-silver link--underlined" href="#">
-                правилами обработки персональных данных
+                  правилами обработки персональных данных
                 </a>
                 &nbsp;и пользовательским соглашением
               </span>
