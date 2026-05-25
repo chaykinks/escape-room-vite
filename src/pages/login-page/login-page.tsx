@@ -164,9 +164,14 @@ function LoginPage(): JSX.Element {
 
               <span className="custom-checkbox__label">
                 Я&nbsp;согласен с&nbsp;
-                <a className="link link--active-silver link--underlined" href="#">
-                  правилами обработки персональных данных
-                </a>
+                <a
+                  className="link link--active-silver link--underlined"
+                  href="/documents/personal-data-policy.pdf"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                правилами обработки персональных данных
+              </a>
                 &nbsp;и пользовательским соглашением
               </span>
             </label>

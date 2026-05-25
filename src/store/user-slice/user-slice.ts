@@ -92,7 +92,7 @@ const userSlice = createSlice({
         state.authorizationStatus = AuthorizationStatus.NoAuth;
         state.authRequestStatus = RequestStatus.Failed;
         state.user = null;
-        state.authError = 'Failed to sign in. Please check your credentials or try again later.';
+        state.authError = 'Не удалось авторизоваться. Проверьте логин и пароль или попробуйте позже.';
       })
       .addCase(logout.pending, (state) => {
         state.authRequestStatus = RequestStatus.Loading;

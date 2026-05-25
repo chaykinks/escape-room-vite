@@ -85,7 +85,7 @@ function BookingPage(): JSX.Element {
 
   const onSubmit: SubmitHandler<BookingFormData> = async (data) => {
     if (!id || !selectedPlaceId || !selectedDate || !selectedTime) {
-      setSlotError('Select place, date and time of booking');
+      setSlotError('Выберите дату и время бронирования');
       return;
     }
 
@@ -115,7 +115,7 @@ function BookingPage(): JSX.Element {
     return (
       <main className="page-content decorated-page">
         <div className="container container--size-s">
-          <p>Loading booking info...</p>
+          <p>Загрузка информации о бронировании</p>
         </div>
       </main>
     );
@@ -135,7 +135,7 @@ function BookingPage(): JSX.Element {
     return (
       <main className="page-content decorated-page">
         <div className="container container--size-s">
-          <p>There is no available places for booking</p>
+          <p>Доступные для бронирования квесты отсутствуют</p>
         </div>
       </main>
     );
@@ -332,7 +332,12 @@ function BookingPage(): JSX.Element {
             </span>
             <span className="custom-checkbox__label">
               Я&nbsp;согласен с&nbsp;
-              <a className="link link--active-silver link--underlined" href="#">
+              <a
+                className="link link--active-silver link--underlined"
+                href="/documents/personal-data-policy.pdf"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
                 правилами обработки персональных данных
               </a>
               &nbsp;и пользовательским соглашением

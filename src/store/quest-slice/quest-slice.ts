@@ -44,7 +44,7 @@ const questSlice = createSlice({
       })
       .addCase(fetchQuest.rejected, (state) => {
         state.questRequestStatus = RequestStatus.Failed;
-        state.questError = 'Failed to load quest.';
+        state.questError = 'Не удалось загрузить квест.';
       });
   },
 });

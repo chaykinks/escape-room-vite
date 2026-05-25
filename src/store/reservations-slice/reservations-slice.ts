@@ -60,7 +60,7 @@ const reservationsSlice = createSlice({
       })
       .addCase(fetchReservations.rejected, (state) => {
         state.reservationsRequestStatus = RequestStatus.Failed;
-        state.reservationsError = 'Failed to load reservations. Please try again later.';
+        state.reservationsError = 'Не удалось загрузить бронирования. Попробуйте позже.';
       })
 
       .addCase(deleteReservation.pending, (state) => {
@@ -76,7 +76,7 @@ const reservationsSlice = createSlice({
       })
       .addCase(deleteReservation.rejected, (state) => {
         state.deleteReservationRequestStatus = RequestStatus.Failed;
-        state.deleteReservationError = 'Failed to delete reservation.';
+        state.deleteReservationError = 'Не удалось отменить бронирование. Попробуйте позже.';
       });
   },
 });
