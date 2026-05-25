@@ -171,7 +171,7 @@ function LoginPage(): JSX.Element {
                   rel="noopener noreferrer"
                 >
                 правилами обработки персональных данных
-              </a>
+                </a>
                 &nbsp;и пользовательским соглашением
               </span>
             </label>

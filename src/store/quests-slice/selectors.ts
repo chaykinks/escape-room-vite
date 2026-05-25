@@ -1,3 +1,4 @@
+import {createSelector} from '@reduxjs/toolkit';
 import {RootState} from '..';
 import {QuestLevel, QuestType} from '../../const';
 import {Quest} from '../../types/quest';
@@ -12,18 +13,18 @@ export const getActiveType = (state: RootState) => state.QUESTS.activeType;
 
 export const getActiveLevel = (state: RootState) => state.QUESTS.activeLevel;
 
-export const getFilteredQuests = (state: RootState): Quest[] => {
-  const quests = getQuests(state);
-  const activeType = getActiveType(state);
-  const activeLevel = getActiveLevel(state);
+export const getFilteredQuests = createSelector(
+  [getQuests, getActiveType, getActiveLevel],
+  (quests, activeType, activeLevel) =>
+    quests.filter((quest) => {
+      const isTypeMatch =
+        activeType === QuestType.All ||
+        quest.type === activeType;
 
-  return quests.filter((quest) => {
-    const isTypeMatch =
-      activeType === QuestType.All || quest.type === activeType;
+      const isLevelMatch =
+        activeLevel === QuestLevel.Any ||
+        quest.level === activeLevel;
 
-    const isLevelMatch =
-      activeLevel === QuestLevel.Any || quest.level === activeLevel;
-
-    return isTypeMatch && isLevelMatch;
-  });
-};
+      return isTypeMatch && isLevelMatch;
+    })
+);
