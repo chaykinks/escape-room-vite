@@ -1,3 +1,4 @@
+import {memo} from 'react';
 import {Icon} from 'leaflet';
 import {MapContainer, Marker, TileLayer} from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
@@ -31,4 +32,5 @@ function Map({center, markerPosition}: MapProps): JSX.Element {
   );
 }
 
-export default Map;
+const MemoizedMap = memo(Map);
+export default MemoizedMap;

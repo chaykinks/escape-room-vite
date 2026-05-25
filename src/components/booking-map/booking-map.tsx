@@ -1,3 +1,4 @@
+import {memo} from 'react';
 import {Icon} from 'leaflet';
 import {MapContainer, Marker, TileLayer} from 'react-leaflet';
 import {BookingPlace} from '../../types/booking';
@@ -53,4 +54,5 @@ function BookingMap({
   );
 }
 
-export default BookingMap;
+const MemoizedBookingMap = memo(BookingMap);
+export default MemoizedBookingMap;
