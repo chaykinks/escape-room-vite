@@ -56,6 +56,12 @@ function BookingPage(): JSX.Element {
   }, [bookingInfo]);
 
   const selectedPlace = bookingInfo.find((place) => place.id === selectedPlaceId);
+  const hasAvailableSlots = selectedPlace ? [
+    ...selectedPlace.slots.today,
+    ...selectedPlace.slots.tomorrow,
+  ].some((slot) => slot.isAvailable)
+    : false;
+
   const [minPeople, maxPeople] = quest?.peopleMinMax ?? [2, 10];
 
   const {
@@ -188,6 +194,12 @@ function BookingPage(): JSX.Element {
           </div>
         </div>
 
+        {!hasAvailableSlots && (
+          <p style={{color: '#f2890f', marginBottom: '20px'}}>
+            Нет доступных слотов для бронирования
+          </p>
+        )}
+
         <form
           className="booking-form"
           action="#"
@@ -316,7 +328,7 @@ function BookingPage(): JSX.Element {
           <button
             className="btn btn--accent btn--cta booking-form__submit"
             type="submit"
-            disabled={sendBookingRequestStatus === RequestStatus.Loading}
+            disabled={!hasAvailableSlots || sendBookingRequestStatus === RequestStatus.Loading}
           >
             {sendBookingRequestStatus === RequestStatus.Loading
               ? 'Отправляем...'
