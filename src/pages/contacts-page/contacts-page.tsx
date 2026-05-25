@@ -9,11 +9,11 @@ function ContactsPage(): JSX.Element {
         <picture>
           <source
             type="image/webp"
-            srcSet="img/content/maniac/maniac-bg-size-m.webp"
+            srcSet="/img/content/maniac/maniac-bg-size-m.webp"
           />
 
           <img
-            src="img/content/maniac/maniac-bg-size-m.jpg"
+            src="/img/content/maniac/maniac-bg-size-m.jpg"
             width="1366"
             height="768"
             alt=""
@@ -86,7 +86,7 @@ function ContactsPage(): JSX.Element {
         </div>
       </div>
     </main>
-);
+  );
 }
 
 export default ContactsPage;

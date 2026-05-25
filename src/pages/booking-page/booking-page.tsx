@@ -143,16 +143,21 @@ function BookingPage(): JSX.Element {
 
   return (
     <main className="page-content decorated-page">
-      <div className="decorated-page__decor" aria-hidden="true">
+      <div
+        className="decorated-page__decor"
+        aria-hidden="true"
+        style={{minHeight: '230%'}}
+      >
         <picture>
           <source
             type="image/webp"
-            srcSet={quest?.coverImgWebp}
+            srcSet="/img/content/maniac/maniac-bg-size-m.webp"
           />
+
           <img
-            src={quest?.coverImg}
+            src="/img/content/maniac/maniac-bg-size-m.jpg"
             width="1366"
-            height="1959"
+            height="768"
             alt=""
           />
         </picture>

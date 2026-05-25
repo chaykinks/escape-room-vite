@@ -1,10 +1,12 @@
+import {QuestLevel, QuestType} from '../const.ts';
+
 type Quest = {
   id: string;
   title: string;
   previewImg: string;
   previewImgWebp: string;
-  level: string;
-  type: string;
+  level: QuestLevel;
+  type: QuestType;
   peopleMinMax: [number, number];
 };
 

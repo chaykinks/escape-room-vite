@@ -1,5 +1,5 @@
 import {Link} from 'react-router-dom';
-import {AppRoute} from '../../const';
+import {AppRoute, BOOKING_DATE_NAME, QUEST_LEVEL_NAME} from '../../const';
 import {Reservation} from '../../types/reservation';
 
 type ReservationCardProps = {
@@ -38,7 +38,7 @@ function ReservationCard({
           </Link>
 
           <span className="quest-card__info">
-            [{reservation.date},&nbsp;{reservation.time}. {reservation.location.address}]
+            [{BOOKING_DATE_NAME[reservation.date]},&nbsp;{reservation.time}. {reservation.location.address}]
           </span>
         </div>
 
@@ -54,7 +54,7 @@ function ReservationCard({
             <svg width="14" height="14" aria-hidden="true">
               <use xlinkHref="#icon-level" />
             </svg>
-            {reservation.quest.level}
+            {QUEST_LEVEL_NAME[reservation.quest.level]}
           </li>
         </ul>
 

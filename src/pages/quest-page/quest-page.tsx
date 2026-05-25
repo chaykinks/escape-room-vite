@@ -1,6 +1,6 @@
 import {useEffect, useState} from 'react';
 import {Link, useParams} from 'react-router-dom';
-import {AppRoute, RequestStatus} from '../../const';
+import {AppRoute, QUEST_LEVEL_NAME, QUEST_TYPE_NAME, RequestStatus} from '../../const';
 import {useAppDispatch, useAppSelector} from '../../hooks';
 import {getQuest, getQuestRequestStatus} from '../../store/quest-slice/selectors';
 import {fetchQuest} from '../../store/quest-slice/quest-slice';
@@ -99,7 +99,7 @@ function QuestPage(): JSX.Element {
 
           <p className="subtitle quest-page__subtitle">
             <span className="visually-hidden">Жанр:</span>
-            {quest.type}
+            {QUEST_TYPE_NAME[quest.type]}
           </p>
 
           <ul className="tags tags--size-l quest-page__tags">
@@ -114,7 +114,7 @@ function QuestPage(): JSX.Element {
               <svg width="14" height="14" aria-hidden="true">
                 <use xlinkHref="#icon-level" />
               </svg>
-              {quest.level}
+              {QUEST_LEVEL_NAME[quest.level]}
             </li>
           </ul>
 

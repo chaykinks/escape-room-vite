@@ -55,7 +55,7 @@ const QUEST_TYPE_NAME: Record<QuestType, string> = {
 
 const QUEST_LEVEL_NAME: Record<QuestLevel, string> = {
   [QuestLevel.Any]: 'Любой',
-  [QuestLevel.Easy]: 'Простой',
+  [QuestLevel.Easy]: 'Лёгкий',
   [QuestLevel.Medium]: 'Средний',
   [QuestLevel.Hard]: 'Сложный',
 };
@@ -76,5 +76,10 @@ const QUEST_LEVELS = [
   QuestLevel.Hard,
 ];
 
+const BOOKING_DATE_NAME = {
+  today: 'Сегодня',
+  tomorrow: 'Завтра',
+} as const;
+
 export {AuthorizationStatus, AppRoute, RequestStatus, APIRoute, QuestType, QuestLevel,
-  QUEST_TYPE_NAME, QUEST_LEVEL_NAME, QUEST_TYPES, QUEST_LEVELS};
+  QUEST_TYPE_NAME, QUEST_LEVEL_NAME, QUEST_TYPES, QUEST_LEVELS, BOOKING_DATE_NAME};

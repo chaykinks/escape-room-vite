@@ -1,8 +1,10 @@
 import {Quest} from './quest';
 
+type BookingDate = 'today' | 'tomorrow';
+
 type Reservation = {
   id: string;
-  date: string;
+  date: BookingDate;
   time: string;
   contactPerson: string;
   phone: string;

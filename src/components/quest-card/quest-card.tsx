@@ -1,5 +1,5 @@
 import {Link} from 'react-router-dom';
-import {AppRoute} from '../../const';
+import {AppRoute, QUEST_LEVEL_NAME} from '../../const';
 import {Quest} from '../../types/quest';
 
 type QuestCardProps = {
@@ -48,7 +48,7 @@ function QuestCard({quest}: QuestCardProps): JSX.Element {
             <svg width="14" height="14" aria-hidden="true">
               <use xlinkHref="#icon-level" />
             </svg>
-            {quest.level}
+            {QUEST_LEVEL_NAME[quest.level]}
           </li>
         </ul>
       </div>
