@@ -1,3 +1,4 @@
+import {memo} from 'react';
 import {Link} from 'react-router-dom';
 import {AppRoute, QUEST_LEVEL_NAME} from '../../const';
 import {Quest} from '../../types/quest';
@@ -56,4 +57,5 @@ function QuestCard({quest}: QuestCardProps): JSX.Element {
   );
 }
 
-export default QuestCard;
+const MemoizedQuestCard = memo(QuestCard);
+export default MemoizedQuestCard;
