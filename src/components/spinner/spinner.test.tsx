@@ -5,6 +5,6 @@ describe('Component test: Spinner', () => {
   it('should render correctly', () => {
     render(<Spinner />);
 
-    expect(screen.getByText(/loading/i)).toBeInTheDocument();
+    expect(screen.getByText(/загрузка/i)).toBeInTheDocument();
   });
 });

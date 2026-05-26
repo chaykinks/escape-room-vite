@@ -4,14 +4,14 @@ function Spinner(): JSX.Element {
       style={{
         fontSize: '28px',
         fontWeight: 500,
-        color: '#4481c3',
+        color: '#ffffff',
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
         height: '60vh',
       }}
     >
-      Loading...
+      Загрузка...
     </div>
   );
 }
