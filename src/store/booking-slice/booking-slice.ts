@@ -62,7 +62,7 @@ const bookingSlice = createSlice({
       })
       .addCase(fetchBookingInfo.rejected, (state) => {
         state.bookingInfoRequestStatus = RequestStatus.Failed;
-        state.bookingInfoError = 'Failed to load booking info. Please try again later.';
+        state.bookingInfoError = 'Не удалось загрузить информацию о бронировании. Попробуйте позже.';
       })
       .addCase(sendBooking.pending, (state) => {
         state.sendBookingRequestStatus = RequestStatus.Loading;
@@ -74,7 +74,7 @@ const bookingSlice = createSlice({
       })
       .addCase(sendBooking.rejected, (state) => {
         state.sendBookingRequestStatus = RequestStatus.Failed;
-        state.sendBookingError = 'Failed to send booking. Please try again.';
+        state.sendBookingError = 'Не удалось забронировать квест. Попробуйте позже.';
       });
   },
 });
