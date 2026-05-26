@@ -4,6 +4,7 @@ import {getFilteredQuests, getQuestsError, getQuestsRequestStatus} from '../../s
 import QuestTypeFilter from '../../components/quest-type-filter/quest-type-filter.tsx';
 import QuestLevelFilter from '../../components/quest-level-filter/quest-level-filter.tsx';
 import QuestCardList from '../../components/quest-card-list/quest-card-list.tsx';
+import Spinner from '../../components/spinner/spinner.ts';
 
 function MainPage(): JSX.Element {
   const quests = useAppSelector(getFilteredQuests);
@@ -11,13 +12,7 @@ function MainPage(): JSX.Element {
   const questsError = useAppSelector(getQuestsError);
 
   if (questsRequestStatus === RequestStatus.Loading) {
-    return (
-      <main className="page-content">
-        <div className="container">
-          <p>Loading...</p>
-        </div>
-      </main>
-    );
+    return <Spinner />;
   }
 
   if (questsRequestStatus === RequestStatus.Failed) {
