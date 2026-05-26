@@ -4,7 +4,7 @@ import {getFilteredQuests, getQuestsError, getQuestsRequestStatus} from '../../s
 import QuestTypeFilter from '../../components/quest-type-filter/quest-type-filter.tsx';
 import QuestLevelFilter from '../../components/quest-level-filter/quest-level-filter.tsx';
 import QuestCardList from '../../components/quest-card-list/quest-card-list.tsx';
-import Spinner from '../../components/spinner/spinner.ts';
+import Spinner from '../../components/spinner/spinner.tsx';
 
 function MainPage(): JSX.Element {
   const quests = useAppSelector(getFilteredQuests);
